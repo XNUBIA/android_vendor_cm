@@ -1,4 +1,4 @@
-function __print_cm_functions_help() {
+function __print_xnubia_functions_help() {
 cat <<EOF
 Additional LineageOS functions:
 - cout:            Changes directory to out.
@@ -96,7 +96,7 @@ function eat()
             done
             echo "Device Found.."
         fi
-        if (adb shell getprop ro.cm.device | grep -q "$CM_BUILD"); then
+        if (adb shell getprop ro.cm.device | grep -q "$XNUBIA_BUILD"); then
             # if adbd isn't root we can't write to /cache/recovery/
             adb root
             sleep 1
@@ -112,7 +112,7 @@ EOF
             fi
             rm /tmp/command
         else
-            echo "The connected device does not appear to be $CM_BUILD, run away!"
+            echo "The connected device does not appear to be $XNUBIA_BUILD, run away!"
         fi
         return $?
     else
@@ -319,7 +319,7 @@ function installboot()
     sleep 1
     adb wait-for-online shell mount /system 2>&1 > /dev/null
     adb wait-for-online remount
-    if (adb shell getprop ro.cm.device | grep -q "$CM_BUILD");
+    if (adb shell getprop ro.xnubia.device | grep -q "$XNUBIA_BUILD");
     then
         adb push $OUT/boot.img /cache/
         for i in $OUT/system/lib/modules/*;
@@ -330,7 +330,7 @@ function installboot()
         adb shell chmod 644 /system/lib/modules/*
         echo "Installation complete."
     else
-        echo "The connected device does not appear to be $CM_BUILD, run away!"
+        echo "The connected device does not appear to be $XNUBIA_BUILD, run away!"
     fi
 }
 
@@ -364,13 +364,13 @@ function installrecovery()
     sleep 1
     adb wait-for-online shell mount /system 2>&1 >> /dev/null
     adb wait-for-online remount
-    if (adb shell getprop ro.cm.device | grep -q "$CM_BUILD");
+    if (adb shell getprop ro.xnubia.device | grep -q "$XNUBIA_BUILD");
     then
         adb push $OUT/recovery.img /cache/
         adb shell dd if=/cache/recovery.img of=$PARTITION
         echo "Installation complete."
     else
-        echo "The connected device does not appear to be $CM_BUILD, run away!"
+        echo "The connected device does not appear to be $XNUBIA_BUILD, run away!"
     fi
 }
 
@@ -791,7 +791,7 @@ function dopush()
         echo "Device Found."
     fi
 
-    if (adb shell getprop ro.cm.device | grep -q "$CM_BUILD") || [ "$FORCE_PUSH" = "true" ];
+    if (adb shell getprop ro.xnubia.device | grep -q "$XNUBIA_BUILD") || [ "$FORCE_PUSH" = "true" ];
     then
     # retrieve IP and PORT info if we're using a TCP connection
     TCPIPPORT=$(adb devices \
@@ -909,7 +909,7 @@ EOF
     rm -f $OUT/.log
     return 0
     else
-        echo "The connected device does not appear to be $CM_BUILD, run away!"
+        echo "The connected device does not appear to be $XNUBIA_BUILD, run away!"
     fi
 }
 
@@ -922,7 +922,7 @@ alias cmkap='dopush cmka'
 
 function repopick() {
     T=$(gettop)
-    $T/vendor/cm/build/tools/repopick.py $@
+    $T/vendor/xnubia/build/tools/repopick.py $@
 }
 
 function fixup_common_out_dir() {
